@@ -191,7 +191,7 @@ font_size 16.0
 #: curl oscillates. With sparse the curl will peak once per character,
 #: with dense twice.
 
-# text_composition_strategy platform
+text_composition_strategy legacy
 
 #: Control how kitty composites text glyphs onto the background color.
 #: The default value of platform tries for text rendering as close to
@@ -956,18 +956,18 @@ hide_window_decorations  titlebar-only
 
 #: The edge to show the tab bar on, top or bottom.
 
-# tab_bar_margin_width 0.0
+tab_bar_margin_width 0.0
 
 #: The margin to the left and right of the tab bar (in pts).
 
-# tab_bar_margin_height 0.0 0.0
+tab_bar_margin_height 0.0 0.0
 
 #: The margin above and below the tab bar (in pts). The first number
 #: is the margin between the edge of the OS Window and the tab bar.
 #: The second number is the margin between the tab bar and the
 #: contents of the current tab.
 
-# tab_bar_style fade
+tab_bar_style powerline
 
 #: The tab bar style, can be one of:
 
@@ -1090,21 +1090,21 @@ hide_window_decorations  titlebar-only
 #: Template to use for active tabs. If not specified falls back to
 #: tab_title_template.
 
-# active_tab_foreground   #000
-# active_tab_background   #eee
-# active_tab_font_style   bold-italic
-# inactive_tab_foreground #444
-# inactive_tab_background #999
-# inactive_tab_font_style normal
+active_tab_foreground   #000
+active_tab_background   #eee
+active_tab_font_style   bold-italic
+inactive_tab_foreground #444
+inactive_tab_background #999
+inactive_tab_font_style normal
 
 #: Tab bar colors and styles.
 
-# tab_bar_background none
+tab_bar_background none
 
 #: Background color for the tab bar. Defaults to using the terminal
 #: background color.
 
-# tab_bar_margin_color none
+tab_bar_margin_color none
 
 #: Color for the tab bar margin area. Defaults to using the terminal
 #: background color for margins above and below the tab bar. For side
@@ -1120,7 +1120,7 @@ hide_window_decorations  titlebar-only
 
 #: The foreground and background colors.
 
-background_opacity 0.6
+background_opacity 0.95
 
 #: The opacity of the background. A number between zero and one, where
 #: one is opaque and zero is fully transparent. This will only work if
@@ -1144,7 +1144,7 @@ background_opacity 0.6
 #: this option when reloading the config will only work if
 #: dynamic_background_opacity was enabled in the original config.
 
-background_blur 50
+background_blur 30
 
 #: Set to a positive value to enable background blur (blurring of the
 #: visuals behind a transparent window) on platforms that support it.
@@ -1602,7 +1602,7 @@ background_blur 50
 #: background_opacity. If you want to use both, you are probably
 #: better off just hiding the titlebar with hide_window_decorations.
 
-# macos_option_as_alt no
+macos_option_as_alt yes
 
 #: Use the Option key as an Alt key on macOS. With this set to no,
 #: kitty will use the macOS native Option+Key to enter Unicode
@@ -2452,3 +2452,12 @@ background_blur 50
 #: }}}
 
 #: }}}
+
+
+# BEGIN_KITTY_THEME
+# Everforest Dark Medium
+# include current-theme.conf
+# include ./kitty-themes/themes/Neutron.conf
+# include ./kitty-themes/themes/OneDark.conf
+include ./kitty-themes/themes/ayu_mirage.conf
+# END_KITTY_THEME
