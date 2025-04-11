@@ -22,15 +22,15 @@ cursor_trail_decay 0.1 0.6
 tab_bar_margin_width        0.0
 tab_bar_margin_height       0.0 0.0
 tab_bar_style powerline
-# window_padding_width        15
+window_padding_width        0
 active_tab_font_style       slanted
 inactive_tab_font_style     normal
 
 
 # window 窗口
 window_margin_width             0
-background_opacity              0.90
-background_blur                 35
+background_opacity              1
+background_blur                 0
 remember_window_size            yes
 hide_window_decorations         titlebar-only
 
@@ -64,7 +64,6 @@ mouse_hide_wait 0.5
 
 
 # BEGIN_KITTY_THEME
-# Rosé Pine
-# include current-theme.conf
-include ./kitty-themes/themes/snazzy.conf
+# Rosé Pine Dawn
+include current-theme.conf
 # END_KITTY_THEME
