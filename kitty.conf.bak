@@ -1,20 +1,17 @@
 
-# font
 
-font_family      JetBrainsMono Nerd Font
-# bold_font        auto
-# italic_font      JetBrainsMono Nerd Font 
-# bold_italic_font JetBrainsMono Nerd Font
+font_size 18.0
 
+# modify_font cell_height 1.2
+# modify_font cell_width 95%
+# text_composition_strategy legacy
 
-font_size 16.0
-
-
-cursor_shape beam
-cursor_trail 10
-cursor_trail_decay 0.1 0.6
+# cursor_shape beam
+# cursor_trail 10
+# cursor_trail_decay 0.1 0.6
 
 
+# text_composition_strategy platform
 # text_composition_strategy legacy
 
 
@@ -30,7 +27,7 @@ inactive_tab_font_style     normal
 # window 窗口
 window_margin_width             0
 background_opacity              1
-background_blur                 0
+# background_blur                 35
 remember_window_size            yes
 hide_window_decorations         titlebar-only
 
@@ -47,8 +44,24 @@ map cmd+8 combine : send_key ctrl+a : send_key 8
 map cmd+9 combine : send_key ctrl+a : send_key 9
 
 
+map ctrl+1 combine : send_key ctrl+a : send_key 1
+map ctrl+2 combine : send_key ctrl+a : send_key 2
+map ctrl+3 combine : send_key ctrl+a : send_key 3
+map ctrl+4 combine : send_key ctrl+a : send_key 4
+map ctrl+5 combine : send_key ctrl+a : send_key 5
+map ctrl+6 combine : send_key ctrl+a : send_key 6
+map ctrl+7 combine : send_key ctrl+a : send_key 7
+map ctrl+8 combine : send_key ctrl+a : send_key 8
+map ctrl+9 combine : send_key ctrl+a : send_key 9
+
+
+
+map ctrl+c copy_and_clear_or_interrupt
+map ctrl+v        paste_from_clipboard
+
 # 兼容nvim键位
 map ctrl+` combine : send_key ctrl+_
+
 # map shift+space send_text all \e[32;2u  
 # map shift+enter send_text all \x1b[13;2u
 
@@ -63,7 +76,17 @@ mouse_hide_wait 0.5
 
 
 
+
 # BEGIN_KITTY_THEME
-# Rosé Pine Dawn
-include current-theme.conf
+# Rosé Pine
+# include current-theme.conf
+include ./kitty-themes/themes/snazzy.conf
 # END_KITTY_THEME
+
+
+# BEGIN_KITTY_FONTS
+font_family      family='JetBrainsMono Nerd Font Mono' style=Medium
+bold_font        family='JetBrainsMono Nerd Font Mono' style=Medium
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS
