@@ -14,6 +14,7 @@ from kitty.tab_bar import (
     draw_attributed_string,
     draw_tab_with_powerline,
 )
+from kitty.utils import color_as_int
 
 timer_id = None
 
@@ -61,12 +62,13 @@ _cleanup_timer()
 def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
     # The tabs may have left some formats enabled. Disable them now.
     draw_attributed_string(Formatter.reset, screen)
-    cells = create_cells()
+    cells = create_cells()  # list of (text, fg, bg)；fg=0 表示用默认色
     # Drop cells that wont fit
     while True:
         if not cells:
             return
-        padding = screen.columns - screen.cursor.x - sum(len(c) + 3 for c in cells)
+        total_len = sum(len(c[0]) + 3 for c in cells)
+        padding = screen.columns - screen.cursor.x - total_len
         if padding >= 0:
             break
         cells = cells[1:]
@@ -74,29 +76,52 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
     if padding:
         screen.draw(" " * padding)
 
-    tab_bg = as_rgb(int(draw_data.inactive_bg))
-    tab_fg = as_rgb(int(draw_data.inactive_fg))
+    # 右侧状态整体使用激活 tab 颜色（active_bg/active_fg）
+    tab_bg = as_rgb(int(draw_data.active_bg))
+    tab_fg = as_rgb(int(draw_data.active_fg))
     default_bg = as_rgb(int(draw_data.default_bg))
-    for cell in cells:
-        # Draw the separator
-        if cell == cells[0]:
-            screen.cursor.fg = tab_bg
-            screen.draw("")
+    prev_bg = default_bg
+    for i, cell in enumerate(cells):
+        text, fg, bg = cell
+        if fg == 0 and bg == 0:
+            fg, bg = tab_fg, tab_bg  # 默认色
+        # 镜像左侧 tab：左侧 tab 用 (右半圆/右凸) 让 tab 向右凸；右侧 cell 镜像用 (左半圆/左凸) 让 cell 向左凸
+        # 每个 cell 左侧画 ：fg=当前cell色(凸出部分)，bg=右侧邻cell色（起始 cell 右侧是终端背景）
+        if i == 0:
+            screen.cursor.fg = bg           # 凸出=当前 cell 色（VIM 蓝），朝左（内容区）
+            screen.cursor.bg = default_bg   # 右侧露终端背景
         else:
-            screen.cursor.fg = default_bg
-            screen.cursor.bg = tab_bg
-            screen.draw("")
-        screen.cursor.fg = tab_fg
-        screen.cursor.bg = tab_bg
-        screen.draw(f" {cell} ")
+            screen.cursor.fg = bg           # 凸出=当前 cell 色（时间紫）
+            screen.cursor.bg = prev_bg      # 右侧邻 cell 色
+        screen.draw("")
+        # 内容
+        screen.cursor.fg = fg
+        screen.cursor.bg = bg
+        screen.draw(f" {text} ")
+        prev_bg = bg
 
 
-def create_cells() -> list[str]:
+def get_vim_mode_status() -> tuple[str, int, int] | None:
+    """返回 (文本, 前景色, 背景色)，均为 as_rgb 编码值；进入 split 模式显示 VIM，否则 None（隐藏）"""
+    try:
+        mode = get_boss().mappings.current_keyboard_mode_name
+        if mode == 'split':
+            return ("VIM", as_rgb(color_as_int(0x1E1E2E)), as_rgb(color_as_int(0x89B4FA)))  # 深字 + Mocha 蓝底
+    except Exception:
+        pass
+    return None
+
+
+def create_cells() -> list[tuple[str, int, int]]:
     now = datetime.datetime.now()
-    # 只显示时间
-    return [
-        now.strftime("%H:%M"),
-    ]
+    cells: list[tuple[str, int, int]] = []
+    # vim 模式指示：显示在时间左边，进入 split 模式显示，退出隐藏
+    vim_mode = get_vim_mode_status()
+    if vim_mode:
+        cells.append(vim_mode)
+    # 时间：fg=0/bg=0 哨兵值，由 draw_right_status 替换为默认 tab 色
+    cells.append((now.strftime("%H:%M"), 0, 0))
+    return cells
 
 def get_laptop_battery_status():
     try:
